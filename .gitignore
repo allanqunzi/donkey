@@ -1,2 +1,6 @@
 *~
 *.o
+static
+static_text
+text_list
+searchQuery

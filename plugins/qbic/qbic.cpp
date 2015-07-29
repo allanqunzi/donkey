@@ -8,16 +8,17 @@ using namespace std;
 namespace donkey {
     void Extractor::extract_path (string const &path, string const &type, Object *object) const {
         Mat src = imread(path,1);
-
+        cout<<"reading image in Extractor::extract_path."<<endl;
         if( !src.data )
         { 
         cerr<<"imread failed " << errno << ": '"<< path << "'" << endl;
         return ; }
 
+
         /// Separate the image in 3 places ( B, G and R )
         vector<Mat> bgr_planes;
         split( src, bgr_planes );
-            
+        cout<<"after reading image in Extractor:extract_path"<<endl;            
         const int histSize=QBIC_CHANNEL_DIM;
 
 

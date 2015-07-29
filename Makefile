@@ -1,7 +1,7 @@
 .PHONY:	all clean nuke
 
 all:
-	./heehaw qbic
+	./heehaw text-lsa
 
 clean:
 	make -C src clean

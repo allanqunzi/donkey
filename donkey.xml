@@ -1,0 +1,15 @@
+<donkey>
+    <max_dbs>1</max_dbs>
+    <root>db</root>
+    <defaults>
+        <K>200</K>
+        <R>2</R>
+        <hint_K>250</hint_K>
+        <hint_R>2</hint_R>
+    </defaults>
+    <lsh><tables>1</tables><bits>10</bits><allocate>67108864</allocate></lsh>
+    <thrift>
+        <server><port>38082</port></server>
+        <client><port>38082</port></client>
+    </thrift>
+</donkey>

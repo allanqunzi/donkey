@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <iostream>
 #include <type_traits>
-// common feature and objects 
+// common feature and objects
 
 namespace donkey {
 
@@ -38,6 +38,21 @@ namespace donkey {
         static unsigned constexpr BITS = B;
     };
 
+    template <typename T, unsigned D>
+    struct Cosine: public PositiveSimilarity {
+        typedef VectorFeature<T,D> feature_type;
+        static float apply (feature_type const &v1, feature_type const &v2) {
+            double v = 0.0;
+            double m1 = 0.0, m2 = 0.0;
+            for (unsigned i = 0; i < D; ++i) {
+                v  += v1.data[i] * v2.data[i];
+                m1 += v1.data[i] * v1.data[i];
+                m2 += v2.data[i] * v2.data[i];
+             }
+            return v/(std::sqrt(m1) * std::sqrt(m2));
+        }
+    };
+
     namespace distance {
 
         typedef NegativeSimilarity Distance;
@@ -59,7 +74,7 @@ namespace donkey {
         struct L2: public Distance {
             typedef VectorFeature<T,D> feature_type;
             static float apply (feature_type const &v1, feature_type const &v2) {
-                double v = 0;
+                double v = 0.0f;
                 for (unsigned i = 0; i < D; ++i) {
                     double a = v1.data[i] - v2.data[i];
                     v += a * a;
@@ -67,6 +82,7 @@ namespace donkey {
                 return std::sqrt(v);
             }
         };
+
 
         template <unsigned D>
         int hamming_with_popcount (uint32_t const *v1, uint32_t const *v2) {

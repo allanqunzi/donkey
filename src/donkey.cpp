@@ -154,7 +154,8 @@ namespace donkey {
             if (request.content.size()) {
                 xtor.extract(request.content, request.type, object);
             }
-            else { // url
+            else { // url 
+                std::cout<<"Inside Server::loadObject, request.raw = true"<<std::endl;
                 xtor.extract_path(path.native(), request.type, object);
             }
         }
