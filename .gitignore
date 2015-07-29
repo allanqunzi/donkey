@@ -1,5 +1,8 @@
 *~
 *.o
+server
+client
+stress
 static
 static_text
 text_list
