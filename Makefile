@@ -1,7 +1,7 @@
 .PHONY:	all clean nuke
 
 all:
-	./heehaw text-lsa
+	./heehaw text-rand
 
 clean:
 	make -C src clean

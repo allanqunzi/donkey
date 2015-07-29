@@ -19,6 +19,8 @@ namespace donkey{
         for (int i = 0; i < RAND_DIM; ++i)
         {
             infile>>ar[i];
+            //if (path == "/home/qunzi/donkey/static_text/0000008.txt")
+            //    std::cout<<i<<"   "<<ar[i]<<endl;
         }
         infile.close();
     }

@@ -1,9 +1,12 @@
 *~
 *.o
+db/*
+donkey.xml
 server
 client
 stress
 static
 static_text
-text_list
+text_list*
+textSearchQuery
 searchQuery

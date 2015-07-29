@@ -27,33 +27,33 @@ namespace donkey {
             }
             virtual unsigned size () const {
                 return parent->entries.size();
-            }   
+            }
             virtual float operator () (unsigned i, unsigned j) const {
                 return (-FeatureSimilarity::POLARITY) *
                        FeatureSimilarity::apply(*parent->entries[i].feature,
                                 *parent->entries[j].feature);
-            }   
-        };  
+            }
+        };
 
         class SearchOracle: public kgraph::SearchOracle {
             KGraphIndex const *parent;
             Feature const &query;
         public:
             SearchOracle (KGraphIndex const *p, Feature const &q): parent(p), query(q) {
-            }   
+            }
             virtual unsigned size () const {
                 return parent->indexed_size;
-            }   
+            }
             virtual float operator () (unsigned i) const {
                 return FeatureSimilarity::apply(*parent->entries[i].feature, query);
-            }   
+            }
         };
 
         KGraph::IndexParams index_params;
         KGraph::SearchParams search_params;
         KGraph *kg_index;
     public:
-        KGraphIndex (Config const &config, bool linear_ = false): 
+        KGraphIndex (Config const &config, bool linear_ = false):
             Index(config),
             linear(linear_),
             min_index_size(config.get<size_t>("donkey.kgraph.min", 10000)),
@@ -108,6 +108,7 @@ namespace donkey {
             else {
                 L = oracle.search(params.K, params.epsilon, &ids[0], &dists[0]);
             }
+            std::cout<<" Inside kgraph, L = "<<L<<std::endl;
             matches->resize(L);
             for (unsigned i = 0; i < L; ++i) {
                 auto &m = matches->at(i);

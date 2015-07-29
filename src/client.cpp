@@ -148,7 +148,7 @@ int main (int argc, char *argv[]) {
                     cout << key << " => " << h.key << '\t' << h.score << '\t' << h.meta << endl;
                 }
                 if (resp.hits.empty()) {
-                    cout << key << endl;
+                    cout << "resp.hits.empty() == true"<< key << endl;
                 }
             }
             catch (Error const &e) {

@@ -122,7 +122,7 @@ namespace donkey {
     struct Object;
 
     // matching of a single feature within object
-    struct Hint {   
+    struct Hint {
         // tag: object may have multiple features, tag is the index of feature
         // tag could also have other meaning in a more generic setting.
         uint32_t dtag;  // data tag, tag of a matched feature
@@ -219,7 +219,7 @@ namespace donkey {
     Index *create_lsh_index (Config const &);
 
     // utility functions
-    
+
     static inline void ReadFile (const std::string &path, std::string *binary) {
         // file could not be too big
         binary->clear();
@@ -262,7 +262,7 @@ namespace donkey {
             ReadFile(path, &content);
             extract(content, type, object);
         }
-        virtual void extract (string const &content, string const &type, Object *object) const; 
+        virtual void extract (string const &content, string const &type, Object *object) const;
     };
 }
 
@@ -354,7 +354,7 @@ namespace donkey {
                 LOG(info) << "Journal recovered.";
                 LOG(info) << count << " items loaded.";
                 LOG(info) << "Offset is " << off << ".";
-            
+
             }
             while (false);
 
@@ -381,7 +381,7 @@ namespace donkey {
         void append (uint16_t dbid, string const &key, string const &meta, Object const &object) {
             if (readonly) throw PermissionError("readonly journal");
             BOOST_VERIFY(str.is_open());
-            std::lock_guard<std::mutex> lock(mutex); 
+            std::lock_guard<std::mutex> lock(mutex);
             RecordHead head;
             head.magic = MAGIC;
             head.dbid = dbid;
@@ -399,7 +399,7 @@ namespace donkey {
         void sync () {
             if (readonly) throw PermissionError("readonly journal");
             BOOST_VERIFY(str.is_open());
-            std::lock_guard<std::mutex> lock(mutex); 
+            std::lock_guard<std::mutex> lock(mutex);
             str.flush();
             ::fsync(fileno_hack(str));
         }
@@ -419,7 +419,7 @@ namespace donkey {
         int default_K;
         float default_R;
     public:
-        DB (Config const &config, bool ro) 
+        DB (Config const &config, bool ro)
             : index(nullptr),
             matcher(config),
             default_K(config.get<int>("donkey.defaults.K", 1)),
@@ -428,7 +428,8 @@ namespace donkey {
             if (default_K <= 0) throw ConfigError("invalid defaults.K");
             if (!isnormal(default_R)) throw ConfigError("invalid defaults.R");
 
-            string algo = config.get<string>("donkey.index.algorithm", "lsh");
+            string algo = config.get<string>("donkey.index.algorithm", "linear");
+            std::cout<<"In DB, string algo = "<<algo<<std::endl;
             if (algo == "linear") {
                 index = create_linear_index(config);
             }
@@ -468,6 +469,7 @@ namespace donkey {
                 object.enumerate([this, &params, &candidates](unsigned qtag, Feature const *ft) {
                     vector<Index::Match> matches;
                     index->search(*ft, params, &matches);
+                    std::cout<<"Inside DB::search, matches.size() = "<<matches.size()<<std::endl;
                     for (auto const &m: matches) {
                         auto &c = candidates[m.object];
                         Hint hint;
@@ -575,7 +577,7 @@ namespace donkey {
             BOOST_VERIFY(dbid < dbs.size());
         }
 
-        void loadObject (ObjectRequest const &request, Object *object) const; 
+        void loadObject (ObjectRequest const &request, Object *object) const;
 
     public:
         Server (Config const &config, bool ro = false)
@@ -590,7 +592,7 @@ namespace donkey {
             for (auto &db: dbs) {
                 db = new DB(config, readonly);
             }
-            // recover journal 
+            // recover journal
             journal.recover([this](uint16_t dbid, string const &key, string const &meta, Object *object){
                 try {
                     dbs[dbid]->insert(key, meta, object);
@@ -642,6 +644,7 @@ namespace donkey {
                 loadObject(request, &object);
             }
             dbs[request.db]->search(object, request, response);
+            std::cout<<"Inside Server::search."<<std::endl;
         }
 
         void misc (MiscRequest const &request, MiscResponse *response) {
