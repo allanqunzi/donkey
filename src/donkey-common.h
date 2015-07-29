@@ -42,14 +42,16 @@ namespace donkey {
     struct Cosine: public PositiveSimilarity {
         typedef VectorFeature<T,D> feature_type;
         static float apply (feature_type const &v1, feature_type const &v2) {
-            double v = 0.0;
-            double m1 = 0.0, m2 = 0.0;
+            float v = 0.0f;
+            float m1 = 0.0f, m2 = 0.0f;
             for (unsigned i = 0; i < D; ++i) {
                 v  += v1.data[i] * v2.data[i];
                 m1 += v1.data[i] * v1.data[i];
                 m2 += v2.data[i] * v2.data[i];
              }
-            return v/(std::sqrt(m1) * std::sqrt(m2));
+             v /= (std::sqrt(m1) * std::sqrt(m2));
+             if(std::isnormal(v)) return v;
+             else return 1.0f;
         }
     };
 
