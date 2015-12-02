@@ -1,8 +1,5 @@
 # donkey
 
-Wei Dong
-wdong@wdong.org
-
 1. Overview
 
 DONKEY is a toolkit for generating content-based search engines (QBSE).
